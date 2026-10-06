@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Donations{% endblock %}
+{% block content %}
+<h2>Record Donation</h2>
+<form method="post" class="card form-grid">
+  <select name="donor_id" required>
+    {% for d in donors %}<option value="{{ d.donor_id }}">{{ d.name }} ({{ d.blood_group }})</option>{% endfor %}
+  </select>
+  <input name="donation_date" type="date" value="{{ today }}" required>
+  <select name="units"><option value="1">1 unit</option><option value="2">2 units</option></select>
+  <button type="submit">Record</button>
+</form>
+<p class="hint">A database trigger blocks donations less than 90 days apart and adds the units to stock automatically.</p>
+
+<h2>Donation History</h2>
+<table>
+  <tr><th>ID</th><th>Date</th><th>Donor</th><th>Group</th><th>City</th><th>Units</th></tr>
+  {% for h in history %}
+  <tr><td>{{ h.donation_id }}</td><td>{{ h.donation_date }}</td><td>{{ h.donor_name }}</td><td>{{ h.blood_group }}</td><td>{{ h.city }}</td><td>{{ h.units }}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

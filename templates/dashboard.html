@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="stat"><span>{{ counts.donors }}</span>Donors</div>
+  <div class="stat"><span>{{ counts.hospitals }}</span>Hospitals</div>
+  <div class="stat"><span>{{ counts.units }}</span>Units in stock</div>
+  <div class="stat"><span>{{ counts.pending }}</span>Pending requests</div>
+</div>
+
+<h2>Blood Stock</h2>
+<div class="stock">
+  {% for s in stock %}
+  <div class="group {{ 'low' if s.units < 2 }}">
+    <div class="bg">{{ s.blood_group }}</div>
+    <div class="units">{{ s.units }} unit{{ 's' if s.units != 1 }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<h2>Recent Donations</h2>
+<table>
+  <tr><th>Date</th><th>Donor</th><th>Group</th><th>City</th><th>Units</th></tr>
+  {% for r in recent %}
+  <tr><td>{{ r.donation_date }}</td><td>{{ r.donor_name }}</td><td>{{ r.blood_group }}</td><td>{{ r.city }}</td><td>{{ r.units }}</td></tr>
+  {% else %}
+  <tr><td colspan="5">No donations yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

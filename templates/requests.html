@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Requests{% endblock %}
+{% block content %}
+<h2>New Blood Request</h2>
+<form method="post" class="card form-grid">
+  <select name="hospital_id" required>
+    {% for h in hospitals %}<option value="{{ h.hospital_id }}">{{ h.name }}</option>{% endfor %}
+  </select>
+  <input name="patient_name" placeholder="Patient name" required>
+  <select name="blood_group" required>
+    {% for bg in groups %}<option>{{ bg }}</option>{% endfor %}
+  </select>
+  <input name="units" type="number" min="1" max="10" value="1" required>
+  <button type="submit">Submit Request</button>
+</form>
+
+<h2>All Requests</h2>
+<table>
+  <tr><th>ID</th><th>Date</th><th>Hospital</th><th>Patient</th><th>Group</th><th>Units</th><th>In stock</th><th>Status</th><th>Action</th></tr>
+  {% for r in requests %}
+  <tr>
+    <td>{{ r.request_id }}</td><td>{{ r.request_date }}</td><td>{{ r.hospital_name }}</td>
+    <td>{{ r.patient_name }}</td><td><b>{{ r.blood_group }}</b></td><td>{{ r.units }}</td>
+    <td>{{ r.in_stock }}</td>
+    <td><span class="badge {{ r.status|lower }}">{{ r.status }}</span></td>
+    <td>
+      {% if r.status == 'Pending' %}
+      <form method="post" action="{{ url_for('process_request', request_id=r.request_id, action='approve') }}" class="inline">
+        <button class="small">Approve</button>
+      </form>
+      <form method="post" action="{{ url_for('process_request', request_id=r.request_id, action='reject') }}" class="inline">
+        <button class="small danger">Reject</button>
+      </form>
+      {% else %}—{% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Donors{% endblock %}
+{% block content %}
+<h2>Register Donor</h2>
+<form method="post" class="card form-grid">
+  <input name="name" placeholder="Full name" required>
+  <select name="gender" required>
+    <option value="M">Male</option><option value="F">Female</option><option value="O">Other</option>
+  </select>
+  <input name="age" type="number" min="18" max="65" placeholder="Age (18-65)" required>
+  <select name="blood_group" required>
+    {% for bg in groups %}<option>{{ bg }}</option>{% endfor %}
+  </select>
+  <input name="phone" pattern="[0-9]{10}" placeholder="10-digit phone" required>
+  <input name="city" placeholder="City" required>
+  <button type="submit">Add Donor</button>
+</form>
+
+<h2>Find Donors</h2>
+<form method="get" class="search">
+  <select name="group">
+    <option value="">All groups</option>
+    {% for bg in groups %}<option {{ 'selected' if bg == group }}>{{ bg }}</option>{% endfor %}
+  </select>
+  <input name="city" value="{{ city }}" placeholder="City">
+  <button type="submit">Search</button>
+  <a href="{{ url_for('donors') }}">Clear</a>
+</form>
+
+<table>
+  <tr><th>ID</th><th>Name</th><th>Gender</th><th>Age</th><th>Group</th><th>Phone</th><th>City</th><th>Last donated</th><th></th></tr>
+  {% for d in donors %}
+  <tr>
+    <td>{{ d.donor_id }}</td><td>{{ d.name }}</td><td>{{ d.gender }}</td><td>{{ d.age }}</td>
+    <td><b>{{ d.blood_group }}</b></td><td>{{ d.phone }}</td><td>{{ d.city }}</td>
+    <td>{{ d.last_donated or '—' }}</td>
+    <td>
+      <form method="post" action="{{ url_for('delete_donor', donor_id=d.donor_id) }}"
+            onsubmit="return confirm('Delete {{ d.name }}?')">
+        <button class="small danger">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="9">No donors found.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

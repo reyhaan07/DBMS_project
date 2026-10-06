@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Blood Bank{% endblock %} · Blood Bank Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <div class="brand">🩸 Blood Bank Management System</div>
+    <nav>
+      {% set ep = request.endpoint %}
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if ep == 'dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('donors') }}" class="{{ 'active' if ep == 'donors' }}">Donors</a>
+      <a href="{{ url_for('donations') }}" class="{{ 'active' if ep == 'donations' }}">Donations</a>
+      <a href="{{ url_for('hospitals') }}" class="{{ 'active' if ep == 'hospitals' }}">Hospitals</a>
+      <a href="{{ url_for('requests_page') }}" class="{{ 'active' if ep == 'requests_page' }}">Requests</a>
+      <a href="{{ url_for('reports') }}" class="{{ 'active' if ep == 'reports' }}">Reports</a>
+    </nav>
+  </header>
+  <main>
+    {% for cat, msg in get_flashed_messages(with_categories=true) %}
+      <div class="flash {{ cat }}">{{ msg }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

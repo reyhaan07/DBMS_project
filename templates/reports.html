@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h2>SQL Reports</h2>
+{% for r in results %}
+<div class="card report">
+  <h3>{{ r.title }}</h3>
+  <pre>{{ r.sql }}</pre>
+  <table>
+    <tr>{% for c in r.cols %}<th>{{ c }}</th>{% endfor %}</tr>
+    {% for row in r.rows %}
+    <tr>{% for v in row %}<td>{{ v if v is not none else '—' }}</td>{% endfor %}</tr>
+    {% else %}
+    <tr><td colspan="{{ r.cols|length }}">No rows.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endfor %}
+{% endblock %}
